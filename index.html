@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERP Система + Бронирование</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+        body { display: flex; height: 100vh; background-color: #f4f6f9; }
+        
+        /* Sidebar */
+        .sidebar { width: 250px; background-color: #343a40; color: #fff; display: flex; flex-direction: column; }
+        .sidebar-header { padding: 20px; text-align: center; border-bottom: 1px solid #4b545c; }
+        .sidebar-menu { list-style: none; padding: 20px 0; }
+        .sidebar-menu li a { display: block; padding: 10px 20px; color: #c2c7d0; text-decoration: none; }
+        .sidebar-menu li a:hover { background-color: #494e53; color: #fff; }
+        
+        /* Main Content */
+        .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+        
+        /* Topbar */
+        .topbar { background-color: #fff; padding: 15px 20px; border-bottom: 1px solid #dee2e6; display: flex; justify-content: space-between; align-items: center; }
+        
+        /* Dashboard */
+        .dashboard { padding: 20px; overflow-y: auto; }
+        .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 20px; }
+        .card { background: #fff; padding: 20px; border-radius: 5px; box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2); }
+        .card h3 { font-size: 14px; color: #6c757d; margin-bottom: 10px; }
+        .card p { font-size: 24px; font-weight: bold; color: #343a40; }
+        
+        /* Table */
+        .table-container { background: #fff; padding: 20px; border-radius: 5px; box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2); margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #dee2e6; }
+        th { background-color: #f8f9fa; color: #495057; }
+        .status { padding: 5px 10px; border-radius: 3px; font-size: 12px; color: #fff; }
+        .status.completed { background-color: #28a745; }
+        .status.pending { background-color: #ffc107; color: #000; }
+        
+        /* Timetable */
+        .timetable { background: #fff; padding: 20px; border-radius: 5px; box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2); }
+        .timetable header { margin-bottom: 20px; }
+        .timetable h2 { color: #343a40; margin-bottom: 10px; }
+        .price-legend-1 { color: #6c757d; font-size: 14px; }
+        .price-legend-1 .label { margin-right: 10px; }
+        .tt__row { display: flex; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #dee2e6; }
+        .tt__date { min-width: 150px; padding: 10px; background: #f8f9fa; border-radius: 3px; }
+        .tt__cal-date { font-weight: bold; display: block; }
+        .tt__DOW { color: #6c757d; font-size: 12px; }
+        .tt__DOW--week-end { color: #dc3545; }
+        .tt__slots { display: flex; flex-wrap: wrap; gap: 5px; flex: 1; }
+        .time_table_label { padding: 8px 12px; border: 1px solid #dee2e6; border-radius: 3px; background: #fff; cursor: pointer; font-size: 13px; }
+        .time_table_label.free { background: #28a745; color: #fff; border-color: #28a745; }
+        .time_table_label.closed { background: #dc3545; color: #fff; border-color: #dc3545; cursor: not-allowed; opacity: 0.6; }
+        .timetable__unhide-rows { margin-top: 15px; padding: 10px 20px; background: #007bff; color: #fff; border: none; border-radius: 3px; cursor: pointer; }
+        .timetable__unhide-rows:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+
+    <!-- Боковое меню -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>ERP System</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="#">📊 Dashboard</a></li>
+            <li><a href="#">📦 Склад</a></li>
+            <li><a href="#">💰 Продажи</a></li>
+            <li><a href="#">📅 Бронирование</a></li>
+            <li><a href="#">👥 Сотрудники</a></li>
+            <li><a href="#">⚙️ Настройки</a></li>
+        </ul>
+    </div>
+
+    <!-- Основной контент -->
+    <div class="main-content">
+        <!-- Верхняя панель -->
+        <div class="topbar">
+            <h3>Панель управления квест-комнатой</h3>
+            <div class="user-info">Администратор | <a href="#" style="color: red;">Выход</a></div>
+        </div>
+
+        <!-- Рабочая область -->
+        <div class="dashboard">
+            <!-- Карточки статистики -->
+            <div class="cards">
+                <div class="card">
+                    <h3>Выручка (Месяц)</h3>
+                    <p>1,250,000 ₽</p>
+                </div>
+                <div class="card">
+                    <h3>Бронирования</h3>
+                    <p>345</p>
+                </div>
+                <div class="card">
+                    <h3>Свободных слотов</h3>
+                    <p>87</p>
+                </div>
+                <div class="card">
+                    <h3>Загрузка</h3>
+                    <p>68%</p>
+                </div>
+            </div>
+
+            <!-- Таблица заказов -->
+            <div class="table-container">
+                <h3>Последние заказы</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Клиент</th>
+                            <th>Дата</th>
+                            <th>Время</th>
+                            <th>Сумма</th>
+                            <th>Статус</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#1023</td>
+                            <td>ООО "Вектор"</td>
+                            <td>2026-03-18</td>
+                            <td>17:30</td>
+                            <td>8,500 ₽</td>
+                            <td><span class="status completed">Выполнен</span></td>
+                        </tr>
+                        <tr>
+                            <td>#1024</td>
+                            <td>ИП Иванов</td>
+                            <td>2026-03-19</td>
+                            <td>10:00</td>
+                            <td>7,500 ₽</td>
+                            <td><span class="status pending">В работе</span></td>
+                        </tr>
+                        <tr>
+                            <td>#1025</td>
+                            <td>ЗАО "Техно"</td>
+                            <td>2026-03-19</td>
+                            <td>22:00</td>
+                            <td>9,000 ₽</td>
+                            <td><span class="status pending">Ожидает</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Система бронирования -->
+            <div class="timetable" id="timetable" data-state="loaded">
+                <header>
+                    <h2>Онлайн бронирование</h2>
+                    <p class="price-legend-1" data-role="price-legend">
+                        Стоимость игры:
+                        <span class="label" data-price="1-of-5">7 500 ₽</span>
+                        <span class="label" data-price="2-of-5">8 000 ₽</span>
+                        <span class="label" data-price="3-of-5">8 500 ₽</span>
+                        <span class="label" data-price="4-of-5">9 000 ₽</span>
+                        <span class="label" data-price="5-of-5">9 500 ₽</span>
+                        <small>(Цена для команды из 2-4 человек, доплата за 5-12-го игроков - 1500 руб./чел.)</small>
+                    </p>
+                    <p style="margin-top: 20px">
+                        <i class="fa fa-child fa-fw text-info"></i> 
+                        Возрастное ограничение: 18+ (14+ в сопровождении (бесконтактный), 18+ (сюжетно-игровой контакт))
+                    </p>
+                    <p style="margin-top: 5px">
+                        <i class="fa fa-info-circle fa-fw text-info"></i> 
+                        Выберите и забронируйте без комиссии свободное время, кликнув по нему
+                    </p>
+                </header>
+
+                <!-- 18 марта -->
+                <div class="tt__row">
+                    <time datetime="2026-03-18" class="tt__date date">
+                        <span class="tt__cal-date">18 марта</span>
+                        <span class="tt__DOW">Ср</span>
+                    </time>
+                    <div class="slots tt__slots">
+                        <button class="item time_table_label closed">01:00</button>
+                        <button class="item time_table_label closed">02:30</button>
+                        <button class="item time_table_label closed">04:00</button>
+                        <button class="item time_table_label closed">10:00</button>
+                        <button class="item time_table_label closed">11:30</button>
+                        <button class="item time_table_label closed">13:00</button>
+                        <button class="item time_table_label closed">14:30</button>
+                        <button class="item time_table_label closed">16:00</button>
+                        <button class="item time_table_label free">17:30</button>
+                        <button class="item time_table_label closed">19:00</button>
+                        <button class="item time_table_label closed">20:30</button>
+                        <button class="item time_table_label closed">22:00</button>
+                        <button class="item time_table_label closed">23:30</button>
+                    </div>
+                </div>
+
+                <!-- 19 марта -->
+                <div class="tt__row">
+                    <time datetime="2026-03-19" class="tt__date date">
+                        <span class="tt__cal-date">19 марта</span>
+                        <span class="tt__DOW">Чт</span>
+                    </time>
+                    <div class="slots tt__slots">
+                        <button class="item time_table_label free">01:00</button>
+                        <button class="item time_table_label free">02:30</button>
+                        <button class="item time_table_label free">04:00</button>
+                        <button class="item time_table_label free">10:00</button>
+                        <button class="item time_table_label free">11:30</button>
+                        <button class="item time_table_label free">13:00</button>
+                        <button class="item time_table_label closed">14:30</button>
+                        <button class="item time_table_label closed">16:00</button>
+                        <button class="item time_table_label closed">17:30</button>
+                        <button class="item time_table_label closed">19:00</button>
+                        <button class="item time_table_label closed">20:30</button>
+                        <button class="item time_table_label free">22:00</button>
+                        <button class="item time_table_label free">23:30</button>
+                    </div>
+                </div>
+
+                <!-- 20 марта -->
+                <div class="tt__row">
+                    <time datetime="2026-03-20" class="tt__date date">
+                        <span class="tt__cal-date">20 марта</span>
+                        <span class="tt__DOW">Пт</span>
+                    </time>
+                    <div class="slots tt__slots">
+                        <button class="item time_table_label free">01:00</button>
+                        <button class="item time_table_label free">02:30</button>
+                        <button class="item time_table_label free">04:00</button>
+                        <button class="item time_table_label free">10:00</button>
+                        <button class="item time_table_label free">11:30</button>
+                        <button class="item time_table_label free">13:00</button>
+                        <button class="item time_table_label free">14:30</button>
+                        <button class="item time_table_label closed">16:00</button>
+                        <button class="item time_table_label closed">17:30</button>
+                        <button class="item time_table_label closed">19:00</button>
+                        <button class="item time_table_label closed">20:30</button>
+                        <button class="item time_table_label closed">22:00</button>
+                        <button class="item time_table_label free">23:30</button>
+                    </div>
+                </div>
+
+                <button type="button" class="timetable__unhide-rows">
+                    <i class="fa fa-chevron-down"></i> Показать больше дней
+                </button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
